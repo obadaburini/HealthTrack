@@ -1,0 +1,440 @@
+﻿@using Microsoft.AspNetCore.Http
+@using HelthTrack.Models.Entities
+@{
+    Layout = null;
+
+    var patientName = Context.Session.GetString("UserName");
+
+    double? lastSugar = ViewBag.LastSugar == null
+        ? (double?)null
+        : (double)ViewBag.LastSugar;
+
+    var records = ViewBag.Records as List<BloodSugarRecord> ?? new List<BloodSugarRecord>();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blood Sugar & Care Plan</title>
+
+    <style>
+        :root {
+            --bg1: #f5f7fb;
+            --bg2: #eef2ff;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 10px 25px rgba(0,0,0,.08);
+            --ok: #16a34a;
+            --warn: #f59e0b;
+            --danger: #dc2626;
+            --primary: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", system-ui, Arial, sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            background: #ffffffcc;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            max-width: 1100px;
+            margin: auto;
+            padding: 16px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        .badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg,#60a5fa,#3b82f6);
+            color: white;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn:hover {
+                background: #f3f4f6;
+            }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 22px 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 18px;
+            margin-top: 20px;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-h {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            color: #374151;
+            background: #f9fafb;
+        }
+
+        .card-b {
+            padding: 16px 18px;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+            .pill.ok {
+                background: #dcfce7;
+                color: var(--ok);
+            }
+
+            .pill.warn {
+                background: #fef3c7;
+                color: var(--warn);
+            }
+
+            .pill.danger {
+                background: #fee2e2;
+                color: var(--danger);
+            }
+
+        .kv {
+            display: flex;
+            justify-content: space-between;
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            gap: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+            input:focus {
+                outline: none;
+                border-color: var(--primary);
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background: #f3f4f6;
+            font-weight: 700;
+        }
+
+        .empty {
+            padding: 14px;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            color: var(--muted);
+            background: #fafafa;
+        }
+
+        /* ✅ أزرار داخل الجدول */
+        .action-btn {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            border: 1px solid var(--border);
+            background: white;
+            text-decoration: none;
+            color: var(--text);
+            display: inline-block;
+            margin-right: 6px;
+            cursor: pointer;
+        }
+
+            .action-btn:hover {
+                background: #f3f4f6;
+            }
+
+        .action-danger {
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        @@media (max-width: 920px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="badge">🩸</div>
+                <div>
+                    Blood Sugar & Care Plan
+                    <small>Diabetes Clinic</small>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <a class="btn" href="/Patient/DiabetesClinic">← Back</a>
+                <a class="btn" href="/Account/Logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <div class="header">
+            <h1>Hello, @patientName</h1>
+            <p>Add readings, see status, and get plan guidance in one place.</p>
+        </div>
+
+        <section class="grid">
+
+            <!-- LEFT -->
+            <div style="display:grid; gap:18px;">
+
+                <div class="card">
+                    <div class="card-h">Add Reading</div>
+                    <div class="card-b">
+                        <form method="post" style="display:grid; gap:10px;">
+                            <input type="number" step="0.1" name="sugarLevel" placeholder="e.g., 120" required />
+                            <button type="submit" class="btn btn-primary">➕ Add</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-h">Last Reading</div>
+                    <div class="card-b">
+                        @if (lastSugar == null)
+                        {
+                            <div class="empty">No readings yet. Add your first reading to get guidance.</div>
+                        }
+                        else
+                        {
+                            <div class="kv">
+                                <span style="color:var(--muted); font-weight:700;">Blood Sugar</span>
+                                <strong>@lastSugar mg/dL</strong>
+                            </div>
+
+                            <div style="margin-top:12px;">
+                                @if (lastSugar < 70)
+                                {
+                                    <span class="pill danger">⚠️ Low</span>
+                                }
+                                else if (lastSugar <= 140)
+                                {
+                                    <span class="pill ok">✅ Normal</span>
+                                }
+                                else if (lastSugar <= 200)
+                                {
+                                    <span class="pill warn">⚠️ High</span>
+                                }
+                                else
+                                {
+                                    <span class="pill danger">🚨 Very High</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-h">History</div>
+                    <div class="card-b">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:220px;">Date</th>
+                                    <th>Level</th>
+                                    <th style="width:180px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!records.Any())
+                                {
+                                    <tr><td colspan="3">No records</td></tr>
+                                }
+                                else
+                                {
+                                    foreach (var r in records)
+                                    {
+                                        <tr>
+                                            <td>@r.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>@r.SugarLevel</td>
+                                            <td>
+                                                <a class="action-btn" href="/Patient/EditBloodSugar/@r.Id">Edit</a>
+
+                                                <form method="post" action="/Patient/DeleteBloodSugar" style="display:inline;">
+                                                    <input type="hidden" name="id" value="@r.Id" />
+                                                    <button type="submit" class="action-btn action-danger">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div style="display:grid; gap:18px;">
+
+                <div class="card">
+                    <div class="card-h">Medication Guidance</div>
+                    <div class="card-b">
+                        @if (lastSugar == null)
+                        {
+                            <div class="empty">Record your blood sugar to receive guidance.</div>
+                        }
+                        else if (lastSugar <= 140)
+                        {
+                            <ul>
+                                <li>Continue your medication as prescribed.</li>
+                                <li>No changes are needed now.</li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <ul>
+                                <li>Continue taking your prescribed medication.</li>
+                                <li><strong>Do NOT change dosage</strong> without consulting a doctor.</li>
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-h">Lifestyle Recommendations</div>
+                    <div class="card-b">
+                        @if (lastSugar != null && lastSugar > 140)
+                        {
+                            <ul>
+                                <li>Reduce sugar and refined carbohydrates.</li>
+                                <li>Avoid sugary drinks.</li>
+                                <li>Walk at least 30 minutes daily.</li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <ul>
+                                <li>Maintain a balanced diet.</li>
+                                <li>Stay physically active.</li>
+                                <li>Drink enough water daily.</li>
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-h">Monitoring & Follow-up</div>
+                    <div class="card-b">
+                        <ul>
+                            <li>Measure blood sugar at least twice daily.</li>
+                            <li>Record all readings in the system.</li>
+                            <li>If high levels persist, consult your doctor.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+</body>
+</html>

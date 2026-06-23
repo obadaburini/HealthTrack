@@ -1,0 +1,219 @@
+﻿@model HelthTrack.Models.User
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthTrack – Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 420px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 32px 30px;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+            .brand h2 {
+                margin: 0;
+                color: #0078ff;
+                font-size: 28px;
+                font-weight: 800;
+            }
+
+            .brand p {
+                margin: 8px 0 0;
+                color: #666;
+                font-size: 14px;
+            }
+
+        .alert-success {
+            background: #e6fff0;
+            color: #0a7a3d;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin: 12px 0 16px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #b00020;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin: 12px 0 16px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 12px 0 16px;
+        }
+
+        .role-card {
+            border: 1px solid #d7d7d7;
+            border-radius: 14px;
+            padding: 14px 12px;
+            cursor: pointer;
+            transition: .15s;
+            text-align: center;
+            font-weight: 800;
+        }
+
+            .role-card.active {
+                border-color: #0078ff;
+                box-shadow: 0 0 0 4px rgba(0,120,255,.12);
+            }
+
+        .field {
+            margin-bottom: 12px;
+        }
+
+            .field label {
+                display: block;
+                margin-bottom: 6px;
+                font-weight: 700;
+                font-size: 13px;
+            }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d7d7d7;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+            input:focus {
+                border-color: #0078ff;
+                box-shadow: 0 0 0 4px rgba(0,120,255,.12);
+                outline: none;
+            }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: #0078ff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background: #005fcc;
+            }
+
+        .footer {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+            .footer a {
+                color: #0078ff;
+                font-weight: 700;
+                text-decoration: none;
+            }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <div class="brand">
+            <h2>HealthTrack</h2>
+            <p>Choose account type, then login</p>
+        </div>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert-success">
+                @TempData["Message"]
+            </div>
+        }
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="error">@ViewBag.Message</div>
+        }
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            <input type="hidden" id="SelectedRole" name="SelectedRole" value="Patient" />
+
+            <div class="role-grid">
+                <div class="role-card active" id="rolePatient" onclick="selectRole('Patient')">
+                    Patient
+                </div>
+
+                <div class="role-card" id="roleDoctor" onclick="selectRole('Doctor')">
+                    Doctor
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Username</label>
+                @Html.TextBoxFor(m => m.Username, new { placeholder = "Enter your username", required = "required" })
+            </div>
+
+            <div class="field">
+                <label>Password</label>
+                @Html.PasswordFor(m => m.Password, new { placeholder = "Enter your password", required = "required" })
+            </div>
+
+            <button class="btn" type="submit">Login</button>
+        }
+
+        <div class="footer">
+            Don't have an account?
+            <a href="/Account/Register">Register</a>
+        </div>
+
+    </div>
+
+    <script>
+        function selectRole(role) {
+            document.getElementById('SelectedRole').value = role;
+
+            document.getElementById('rolePatient').classList.remove('active');
+            document.getElementById('roleDoctor').classList.remove('active');
+
+            if (role === 'Patient')
+                document.getElementById('rolePatient').classList.add('active');
+            else
+                document.getElementById('roleDoctor').classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

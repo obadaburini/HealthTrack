@@ -1,0 +1,251 @@
+﻿@model HelthTrack.Models.HeartRecord
+@using Microsoft.AspNetCore.Http
+@using HelthTrack.Models
+@using System.Collections.Generic
+@using System.Linq
+
+@{
+    Layout = null;
+    var patientName = Context.Session.GetString("UserName") ?? "Patient";
+
+    var last = ViewBag.Last as HeartRecord;
+    var records = ViewBag.Records as List<HeartRecord> ?? new List<HeartRecord>();
+
+    string bpStatus = "—";
+    string bpClass = "warn";
+
+    if (last != null)
+    {
+        if (last.Systolic < 90 || last.Diastolic < 60) { bpStatus = "Low"; bpClass = "danger"; }
+        else if (last.Systolic < 120 && last.Diastolic < 80) { bpStatus = "Normal"; bpClass = "ok"; }
+        else if (last.Systolic < 130 && last.Diastolic < 80) { bpStatus = "Elevated"; bpClass = "warn"; }
+        else if (last.Systolic < 140 || last.Diastolic < 90) { bpStatus = "High (Stage 1)"; bpClass = "warn"; }
+        else { bpStatus = "High (Stage 2)"; bpClass = "danger"; }
+    }
+
+    string hrStatus = "—";
+    string hrClass = "warn";
+    if (last != null)
+    {
+        if (last.HeartRate < 60) { hrStatus = "Low"; hrClass = "warn"; }
+        else if (last.HeartRate <= 100) { hrStatus = "Normal"; hrClass = "ok"; }
+        else { hrStatus = "High"; hrClass = "danger"; }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Heart Vitals</title>
+    <style>
+        body {
+            font-family: 'Segoe UI',sans-serif;
+            background: linear-gradient(135deg,#ffecd2,#fcb69f);
+            margin: 0;
+            color: #333;
+        }
+
+        .top-bar {
+            background: rgba(0,0,0,0.15);
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+        }
+
+        .logout {
+            background: #ff4d4d;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 40px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+        }
+
+        input {
+            padding: 12px;
+            width: 190px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            background: #b91c1c;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background: #7f1d1d;
+            }
+
+        /* ✅ Actions container: يخليهم قد بعض */
+        .actions-cell {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* ✅ نفس الشكل لـ <a> و <button> */
+        .action-btn {
+            width: 82px; /* نفس العرض */
+            height: 34px; /* نفس الارتفاع */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            color: #b91c1c;
+            padding: 0; /* مهم حتى ما يختلف button عن a */
+            line-height: 1;
+        }
+
+            .action-btn:hover {
+                background: #f5f5f5;
+            }
+
+        .action-danger {
+            border-color: #fecaca;
+            color: #c62828;
+        }
+
+        .ok {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .warn {
+            color: #ef6c00;
+            font-weight: bold;
+        }
+
+        .danger {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #b91c1c;
+            color: white;
+        }
+
+        a.back {
+            color: #b91c1c;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div>❤️ Heart Vitals</div>
+        <a href="/Account/Logout" class="logout">Logout</a>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+            <h2>Hello, @patientName</h2>
+            <p>Add your readings:</p>
+
+            <form method="post" action="/Patient/HeartVitals">
+                <input type="number" name="systolic" placeholder="Systolic (120)" required />
+                <input type="number" name="diastolic" placeholder="Diastolic (80)" required />
+                <input type="number" name="heartRate" placeholder="Heart rate (75)" required />
+                <button class="btn" type="submit">Add</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Last Reading</h3>
+            @if (last == null)
+            {
+                <p class="warn">No readings yet.</p>
+            }
+            else
+            {
+                <p class="@bpClass">Blood Pressure: @last.Systolic/@last.Diastolic → @bpStatus</p>
+                <p class="@hrClass">Heart Rate: @last.HeartRate bpm → @hrStatus</p>
+            }
+        </div>
+
+        <div class="card">
+            <h3>History</h3>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>BP</th>
+                    <th>HR</th>
+                    <th>Actions</th>
+                </tr>
+
+                @if (!records.Any())
+                {
+                    <tr><td colspan="4">No records</td></tr>
+                }
+                else
+                {
+                    foreach (var r in records)
+                    {
+                        <tr>
+                            <td>@r.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@r.Systolic/@r.Diastolic</td>
+                            <td>@r.HeartRate</td>
+                            <td>
+                                <div class="actions-cell">
+                                    <a class="action-btn" href="/Patient/EditHeartVitals/@r.Id">Edit</a>
+
+                                    <form method="post" action="/Patient/DeleteHeartVitals">
+                                        <input type="hidden" name="id" value="@r.Id" />
+                                        <button type="submit" class="action-btn action-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+
+        <a class="back" href="/Patient/HeartClinic">← Back to Heart Clinic</a>
+    </div>
+</body>
+</html>

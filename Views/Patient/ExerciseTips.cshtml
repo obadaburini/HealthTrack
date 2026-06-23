@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/css/nutrition.css" />
+
+<div class="tips-container">
+    <div class="tips-title">🏃‍♂️ Exercise Tips</div>
+    <div class="tips-category">
+        Based on your BMI category: <strong>@ViewBag.Category</strong>
+    </div>
+
+    <div class="tips-grid">
+
+        @if (ViewBag.Category == "نحافة")
+        {
+            <div class="tip-card">
+                <h4>Strength Training</h4>
+                <p>Focus on resistance exercises to build muscle mass.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Rest Days</h4>
+                <p>Allow enough recovery time between workouts.</p>
+            </div>
+        }
+        else if (ViewBag.Category == "طبيعي")
+        {
+            <div class="tip-card">
+                <h4>Daily Walking</h4>
+                <p>30 minutes of walking helps maintain your weight.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Light Cardio</h4>
+                <p>Include cycling or jogging in your routine.</p>
+            </div>
+        }
+        else
+        {
+            <div class="tip-card">
+                <h4>Fat Burning</h4>
+                <p>Cardio exercises are effective for weight loss.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Consistency</h4>
+                <p>Exercise regularly and avoid long sitting periods.</p>
+            </div>
+        }
+
+    </div>
+
+    <a href="javascript:void(0);" class="back-btn" onclick="history.back()">⬅ Back</a>
+</div>

@@ -1,0 +1,287 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    Layout = null;
+    var patientName = Context.Session.GetString("UserName") ?? "Patient";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Patient Dashboard - HealthTrack</title>
+
+    <style>
+        :root {
+            --bg1: #4facfe;
+            --bg2: #00f2fe;
+            --text: #ffffff;
+            --muted: rgba(255,255,255,.85);
+            --card: #ffffff;
+            --cardText: #0f172a;
+            --border: rgba(255,255,255,.20);
+            --shadow: 0 12px 30px rgba(0,0,0,.18);
+            --radius: 16px;
+            --primary: #0078ff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(0,0,0,0.18);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255,255,255,.14);
+        }
+
+        .topbar-inner {
+            max-width: 1100px;
+            margin: auto;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+        }
+
+            .brand small {
+                display: block;
+                font-weight: 700;
+                color: rgba(255,255,255,.75);
+                margin-top: 2px;
+            }
+
+        .logout {
+            padding: 7px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            font-weight: 800;
+            border: 1px solid rgba(255,255,255,.22);
+            background: rgba(255,255,255,.10);
+        }
+
+            .logout:hover {
+                background: rgba(255,255,255,.16);
+            }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 26px auto;
+            padding: 0 22px 40px;
+        }
+
+        .hero {
+            margin-top: 10px;
+            padding: 22px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255,255,255,.08);
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+        }
+
+            .hero h2 {
+                margin: 0;
+                font-size: 30px;
+                letter-spacing: .2px;
+            }
+
+            .hero p {
+                margin: 8px 0 0;
+                color: var(--muted);
+                font-weight: 700;
+            }
+
+        .grid {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            color: var(--cardText);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(15,23,42,.06);
+            overflow: hidden;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 18px 40px rgba(0,0,0,.22);
+            }
+
+        .card-b {
+            padding: 18px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 900;
+            margin: 0 0 6px;
+            color: #0f172a;
+        }
+
+        .desc {
+            margin: 0;
+            color: #475569;
+            font-weight: 700;
+            line-height: 1.6;
+            min-height: 48px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-weight: 900;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), #2dd4bf);
+            border: none;
+        }
+
+            .btn:hover {
+                filter: brightness(.96);
+            }
+
+        .btn-secondary {
+            background: #0f172a;
+            color: #fff;
+        }
+
+            .btn-secondary:hover {
+                filter: brightness(1.1);
+            }
+
+        @@media (max-width: 1050px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 620px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wrap {
+                padding: 0 16px 36px;
+            }
+
+            .topbar-inner {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div>🏥 Patient Dashboard</div>
+                <div>
+                    <small>Hello, @patientName</small>
+                </div>
+            </div>
+            <a href="/Account/Logout" class="logout">Logout</a>
+        </div>
+    </header>
+
+    <main class="wrap">
+
+        <section class="hero">
+            <h2>Welcome to HealthTrack</h2>
+            <p>Select one of the clinics below to continue.</p>
+        </section>
+
+        <section class="grid">
+
+            <!-- HEART -->
+            <div class="card">
+                <div class="card-b">
+                    <div class="title">❤️ Heart Clinic</div>
+                    <p class="desc">Blood pressure & heart monitoring basics.</p>
+
+                    <div class="btn-row">
+                        <a class="btn" href="/Patient/HeartClinic">Enter</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIABETES -->
+            <div class="card">
+                <div class="card-b">
+                    <div class="title">🩸 Diabetes Clinic</div>
+                    <p class="desc">Blood sugar tracking and diabetes care plan.</p>
+
+                    <div class="btn-row">
+                        <a class="btn" href="/Patient/DiabetesClinic">Enter</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GENERAL -->
+            <div class="card">
+                <div class="card-b">
+                    <div class="title">🩺 General Checkup</div>
+                    <p class="desc">Basic health tests with quick feedback.</p>
+
+                    <div class="btn-row">
+                        <a class="btn" href="/Patient/GeneralCheckup">Enter</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NUTRITION -->
+            <div class="card">
+                <div class="card-b">
+                    <div class="title">🥗 Nutrition Clinic</div>
+                    <p class="desc">BMI, diet planning, and activity insights.</p>
+
+                    <div class="btn-row">
+                        <a class="btn" href="/Patient/NutritionClinic">Enter</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+</body>
+</html>

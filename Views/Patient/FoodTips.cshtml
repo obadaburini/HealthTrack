@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/css/nutrition.css" />
+
+<div class="tips-container food">
+    <div class="tips-title">🥗 Nutrition Tips</div>
+    <div class="tips-category">
+        Based on your BMI category: <strong>@ViewBag.Category</strong>
+    </div>
+
+    <div class="tips-grid">
+
+        @if (ViewBag.Category == "نحافة")
+        {
+            <div class="tip-card">
+                <h4>High Protein</h4>
+                <p>Increase protein intake to support muscle growth.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Healthy Calories</h4>
+                <p>Include nuts, dairy, and healthy fats.</p>
+            </div>
+        }
+        else if (ViewBag.Category == "طبيعي")
+        {
+            <div class="tip-card">
+                <h4>Balanced Diet</h4>
+                <p>Maintain a balance of proteins, carbs, and fats.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Hydration</h4>
+                <p>Drink enough water throughout the day.</p>
+            </div>
+        }
+        else
+        {
+            <div class="tip-card">
+                <h4>Reduce Sugar</h4>
+                <p>Limit sugary foods and drinks.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Low Fat Meals</h4>
+                <p>Choose grilled and boiled meals.</p>
+            </div>
+        }
+
+    </div>
+
+    <a href="javascript:void(0);" class="back-btn" onclick="history.back()">⬅ Back</a>
+</div>

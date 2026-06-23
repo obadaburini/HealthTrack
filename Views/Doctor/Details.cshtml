@@ -1,0 +1,480 @@
+﻿@model HelthTrack.Models.ViewModels.DoctorPatientReportVM
+@using System.Linq
+
+@{
+    Layout = null;
+    var username = (ViewBag.PatientUsername as string) ?? "";
+    var p = Model.Patient;
+
+    // مرض المريض من PatientUser (إذا مش موجود نعرض —)
+    var disease = p?.PatientUser?.Disease ?? "—";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Patient Report</title>
+
+    <style>
+        :root {
+            --bg1: #f5f7fb;
+            --bg2: #eef2ff;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --shadow: 0 10px 25px rgba(0,0,0,.08);
+            --primary: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI",system-ui,Arial,sans-serif;
+            background: linear-gradient(135deg,var(--bg1),var(--bg2));
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            background: #ffffffcc;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            max-width: 1200px;
+            margin: auto;
+            padding: 16px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+        }
+
+        .badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg,#60a5fa,#3b82f6);
+            color: #fff;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background: #f3f4f6;
+            }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 22px auto;
+            padding: 0 22px 44px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-h {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 900;
+            background: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card-b {
+            padding: 16px 18px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eef2ff;
+            border: 1px solid #dbeafe;
+            color: #1d4ed8;
+            font-weight: 900;
+            font-size: 12px;
+        }
+
+        .kv {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+            .kv .box {
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 12px;
+                background: #fff;
+            }
+
+            .kv .k {
+                font-size: 12px;
+                font-weight: 900;
+                color: var(--muted);
+            }
+
+            .kv .v {
+                margin-top: 6px;
+                font-size: 16px;
+                font-weight: 900;
+                color: var(--text);
+            }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .tab {
+            border: 1px solid var(--border);
+            background: #fff;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+            .tab.active {
+                border-color: #bfdbfe;
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background: #f3f4f6;
+            font-weight: 900;
+        }
+
+        .empty {
+            padding: 14px;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            background: #fafafa;
+            color: var(--muted);
+            font-weight: 800;
+        }
+
+        .section {
+            display: none;
+        }
+
+            .section.show {
+                display: block;
+            }
+
+        @@media (max-width: 860px) {
+            .kv {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @@media (max-width: 520px) {
+            .kv {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="badge">🧑‍⚕️</div>
+                <div>
+                    Patient Report
+                    <div class="muted" style="font-weight:800;">Doctor Panel</div>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <a class="btn" href="/Doctor/Patients">← Back</a>
+                <a class="btn" href="/Account/Logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <div class="grid">
+
+            <!-- Patient Summary -->
+            <div class="card">
+                <div class="card-h">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="font-size:18px;">🧾 @p.Name</div>
+                        @if (!string.IsNullOrWhiteSpace(username))
+                        {
+                            <span class="pill">Username: @username</span>
+                        }
+                    </div>
+
+                    <!-- ✅ ID الصحيح -->
+                    <div class="muted">Patient User ID: @p.PatientUserId</div>
+                </div>
+
+                <div class="card-b">
+                    <div class="kv">
+                        <div class="box">
+                            <div class="k">Age</div>
+                            <div class="v">@p.Age</div>
+                        </div>
+                        <div class="box">
+                            <div class="k">Weight</div>
+                            <div class="v">@p.Weight kg</div>
+                        </div>
+                        <div class="box">
+                            <div class="k">Disease</div>
+                            <div class="v">@disease</div>
+                        </div>
+                        <div class="box">
+                            <div class="k">Records</div>
+                            <div class="v">@((Model.BloodSugar?.Count ?? 0) + (Model.HeartVitals?.Count ?? 0) + (Model.Checkups?.Count ?? 0))</div>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab active" data-tab="sugar">🩸 Blood Sugar</button>
+                        <button class="tab" data-tab="heart">❤️ Heart</button>
+                        <button class="tab" data-tab="checkup">🩺 Checkup</button>
+                        <button class="tab" data-tab="appt">📅 Appointments</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blood Sugar -->
+            <div class="card section show" id="tab-sugar">
+                <div class="card-h">
+                    <span>🩸 Blood Sugar Records</span>
+                    <span class="muted">Total: @(Model.BloodSugar?.Count ?? 0)</span>
+                </div>
+                <div class="card-b">
+                    @if (Model.BloodSugar == null || !Model.BloodSugar.Any())
+                    {
+                        <div class="empty">No blood sugar records for this patient.</div>
+                    }
+                    else
+                    {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:220px;">Date</th>
+                                    <th>Level (mg/dL)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model.BloodSugar)
+                                {
+                                    <tr>
+                                        <td>@r.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@r.SugarLevel</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+
+            <!-- Heart -->
+            <div class="card section" id="tab-heart">
+                <div class="card-h">
+                    <span>❤️ Heart Vitals</span>
+                    <span class="muted">Total: @(Model.HeartVitals?.Count ?? 0)</span>
+                </div>
+                <div class="card-b">
+                    @if (Model.HeartVitals == null || !Model.HeartVitals.Any())
+                    {
+                        <div class="empty">No heart records for this patient.</div>
+                    }
+                    else
+                    {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:220px;">Date</th>
+                                    <th>BP</th>
+                                    <th>HR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model.HeartVitals)
+                                {
+                                    <tr>
+                                        <td>@r.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@r.Systolic/@r.Diastolic</td>
+                                        <td>@r.HeartRate</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+
+            <!-- Checkup -->
+            <div class="card section" id="tab-checkup">
+                <div class="card-h">
+                    <span>🩺 General Checkup</span>
+                    <span class="muted">Total: @(Model.Checkups?.Count ?? 0)</span>
+                </div>
+                <div class="card-b">
+                    @if (Model.Checkups == null || !Model.Checkups.Any())
+                    {
+                        <div class="empty">No checkup records for this patient.</div>
+                    }
+                    else
+                    {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:220px;">Date</th>
+                                    <th>Temp</th>
+                                    <th>O2</th>
+                                    <th>RR</th>
+                                    <th>W</th>
+                                    <th>H</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model.Checkups)
+                                {
+                                    <tr>
+                                        <td>@r.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@r.Temperature</td>
+                                        <td>@r.OxygenLevel</td>
+                                        <td>@r.RespiratoryRate</td>
+                                        <td>@r.Weight</td>
+                                        <td>@r.Height</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+
+            <!-- Appointments -->
+            <div class="card section" id="tab-appt">
+                <div class="card-h">
+                    <span>📅 Appointments</span>
+                    <span class="muted">Total: @(Model.Appointments?.Count ?? 0)</span>
+                </div>
+                <div class="card-b">
+                    @if (Model.Appointments == null || !Model.Appointments.Any())
+                    {
+                        <div class="empty">No appointments for this patient.</div>
+                    }
+                    else
+                    {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:220px;">Date</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var a in Model.Appointments)
+                                {
+                                    <tr>
+                                        <td>@a.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@a.Description</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const tabs = document.querySelectorAll(".tab");
+        const sections = {
+            sugar: document.getElementById("tab-sugar"),
+            heart: document.getElementById("tab-heart"),
+            checkup: document.getElementById("tab-checkup"),
+            appt: document.getElementById("tab-appt"),
+        };
+
+        tabs.forEach(t => {
+            t.addEventListener("click", () => {
+                tabs.forEach(x => x.classList.remove("active"));
+                t.classList.add("active");
+
+                Object.values(sections).forEach(s => s.classList.remove("show"));
+                const key = t.getAttribute("data-tab");
+                sections[key].classList.add("show");
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+﻿@model HelthTrack.Models.ViewModels.EditPatientVM
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Edit Patient";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Edit Patient</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --primary: #334155;
+            --radius: 14px;
+            --shadow: 0 10px 25px rgba(0,0,0,.08);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 420px;
+            padding: 22px;
+        }
+
+        h2 {
+            margin: 0 0 14px;
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: -8px;
+            margin-bottom: 14px;
+        }
+
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #ffffff;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                filter: brightness(1.05);
+            }
+
+        .validation {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>Edit Patient</h2>
+
+        <form asp-controller="Doctor" asp-action="EditPatient" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="PatientUserId" />
+
+            <div class="hint">
+                Age and weight are taken automatically from the patient account.
+            </div>
+
+            <div class="field">
+                <label>Patient Type</label>
+                <select asp-for="PatientType">
+                    <option value="Diabetes">Diabetic Patient</option>
+                    <option value="Heart">Heart Patient</option>
+                    <option value="Both">Both (Diabetes + Heart)</option>
+                </select>
+                <span class="validation" asp-validation-for="PatientType"></span>
+            </div>
+
+            <div class="actions">
+                <a class="btn" asp-controller="Doctor" asp-action="Patients">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

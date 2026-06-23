@@ -1,0 +1,182 @@
+﻿/* ===== Nutrition Clinic Style ===== */
+
+.nutrition-container {
+    width: 420px;
+    margin: 40px auto;
+    background: rgba(255, 255, 255, 0.9); /* ✅ الخطوة 2: شفافية */
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.15); /* زيادة الظل لتبرز فوق الخلفية المتحركة */
+}
+
+    .nutrition-container h2 {
+        text-align: center;
+        color: #2e7d32;
+        margin-bottom: 20px;
+    }
+
+    .nutrition-container input,
+    .nutrition-container select {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 1px solid #a5d6a7;
+        outline: none;
+    }
+
+    .nutrition-container button {
+        width: 100%;
+        background: #2e7d32;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s; /* ✅ الخطوة 3: حركة للأزرار */
+    }
+
+        .nutrition-container button:hover {
+            background: #1b5e20;
+            transform: translateY(-3px); /* حركة خفيفة عند hover */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+.bmi-box {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 48%;
+    transition: transform 0.3s, box-shadow 0.3s; /* ✅ حركة للأزرار */
+}
+
+    .btn.green {
+        background: #2e7d32;
+        color: white;
+    }
+
+    .btn.white {
+        background: white;
+        color: #2e7d32;
+        border: 1px solid #2e7d32;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+/* ===== Tips Pages ===== */
+
+.tips-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.9); /* ✅ الخطوة 2: شفافية */
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* زيادة الظل */
+}
+
+.tips-title {
+    text-align: center;
+    font-size: 32px;
+    color: #2e7d32;
+    margin-bottom: 25px;
+}
+
+.tips-category {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.tip-card {
+    background: #f1f8e9;
+    padding: 20px;
+    border-radius: 15px;
+    transition: transform 0.3s, box-shadow 0.3s; /* ✅ حركة للأزرار والكروت */
+    border-left: 6px solid #66bb6a;
+}
+
+    .tip-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    .tip-card h4 {
+        margin-top: 0;
+        color: #1b5e20;
+    }
+
+    .tip-card p {
+        color: #555;
+        font-size: 15px;
+    }
+
+.food .tip-card {
+    background: #e3f2fd;
+    border-left: 6px solid #42a5f5;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 30px;
+    background: #2e7d32;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.3s, box-shadow 0.3s; /*  حركة للأزرار */
+}
+
+    .back-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+/* ===== Animated Gradient Background ===== */
+body {
+    background: linear-gradient(-45deg, #a8e6cf, #dcedc1, #ffd3b6, #ffaaa5);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}

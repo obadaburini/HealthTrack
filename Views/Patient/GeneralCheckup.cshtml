@@ -1,0 +1,410 @@
+﻿@using Microsoft.AspNetCore.Http
+@using HelthTrack.Models
+@using System.Collections.Generic
+@using System.Linq
+
+@{
+    Layout = null;
+    var patientName = Context.Session.GetString("UserName") ?? "Patient";
+
+    double? temperature = ViewBag.Temperature;
+    double? oxygenLevel = ViewBag.OxygenLevel;
+    double? respiratoryRate = ViewBag.RespiratoryRate;
+
+    var records = ViewBag.Records as List<GeneralCheckupRecord> ?? new List<GeneralCheckupRecord>();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>General Checkup</title>
+
+    <style>
+        :root {
+            --bg1: #e6fffb;
+            --bg2: #e0f2fe;
+            --primary: #0ea5a4;
+            --primary2: #14b8a6;
+            --text: #0f172a;
+            --muted: #64748b;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --shadow: 0 10px 25px rgba(0,0,0,.08);
+            --ok: #16a34a;
+            --warn: #f59e0b;
+            --danger: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            background: #ffffffcc;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            max-width: 1000px;
+            margin: auto;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        .badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary2));
+            color: white;
+            box-shadow: 0 10px 22px rgba(20,184,166,.22);
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn:hover {
+                background: #f3f4f6;
+            }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary2));
+            color: white;
+            border: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 26px auto;
+            padding: 0 22px 40px;
+        }
+
+        .header h2 {
+            margin: 8px 0 0;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 18px;
+            margin-top: 18px;
+        }
+
+        .section-title {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .field {
+            margin: 10px 0 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #fff;
+        }
+
+            input:focus {
+                outline: none;
+                border-color: rgba(14,165,164,.55);
+                box-shadow: 0 0 0 4px rgba(14,165,164,.12);
+            }
+
+        .status {
+            margin: 8px 0 0;
+            font-weight: 800;
+        }
+
+        .ok {
+            color: var(--ok);
+        }
+
+        .warn {
+            color: var(--warn);
+        }
+
+        .danger {
+            color: var(--danger);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background: #f3f4f6;
+            font-weight: 800;
+        }
+
+        .action-btn {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            border: 1px solid var(--border);
+            background: white;
+            text-decoration: none;
+            color: var(--text);
+            display: inline-block;
+            margin-right: 6px;
+            cursor: pointer;
+        }
+
+            .action-btn:hover {
+                background: #f3f4f6;
+            }
+
+        .action-danger {
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        @@media (max-width: 720px) {
+            .topbar-inner {
+                padding: 14px 16px;
+            }
+
+            .container {
+                padding: 0 16px 36px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="badge">🩺</div>
+                <div>
+                    General Checkup
+                    <small>@patientName</small>
+                </div>
+            </div>
+
+            <a href="/Account/Logout" class="btn">Logout</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="header">
+            <h2>Hello, @patientName</h2>
+            <p>Enter your vital signs to get quick feedback.</p>
+        </div>
+
+        @using (Html.BeginForm("GeneralCheckup", "Patient", FormMethod.Post))
+        {
+            <div class="card">
+                <h3 class="section-title">🩺 Add Reading</h3>
+
+                <div class="field">
+                    <label>Temperature (°C)</label>
+                    <input type="number" name="temperature" placeholder="e.g. 37.5" step="0.1" required />
+                </div>
+
+                <div class="field">
+                    <label>Weight (kg)</label>
+                    <input type="number" name="weight" placeholder="e.g. 70" step="0.1" required />
+                </div>
+
+                <div class="field">
+                    <label>Height (cm)</label>
+                    <input type="number" name="height" placeholder="e.g. 175" step="0.1" required />
+                </div>
+
+                <div class="field">
+                    <label>Oxygen (%)</label>
+                    <input type="number" name="oxygenLevel" placeholder="e.g. 98" step="0.1" required />
+                </div>
+
+                <div class="field">
+                    <label>Breaths / min</label>
+                    <input type="number" name="respiratoryRate" placeholder="e.g. 16" step="1" required />
+                </div>
+
+                @if (temperature != null || oxygenLevel != null || respiratoryRate != null)
+                {
+                    <hr style="border:none;border-top:1px solid var(--border); margin:16px 0;" />
+                    <h3 class="section-title">Last Reading Feedback</h3>
+
+                    @if (temperature != null)
+                    {
+                        if (temperature < 36.0)
+                        {
+                            <p class="status danger">⚠️ Low temperature.</p>
+                        }
+                        else if (temperature <= 37.5)
+                        {
+
+                            <p class="status ok">✅ Normal temperature (@temperature °C)</p>
+                        }
+                        else
+                        {
+
+                            <p class="status warn">⚠️ High temperature (@temperature °C).</p>
+                        }
+                    }
+
+                    @if (oxygenLevel != null)
+                    {
+                        if (oxygenLevel < 90)
+                        {
+                            <p class="status danger">⚠️ Low oxygen (@oxygenLevel%).</p>
+                        }
+                        else
+                        {
+
+                            <p class="status ok">✅ Normal oxygen (@oxygenLevel%).</p>
+                        }
+                    }
+
+                    @if (respiratoryRate != null)
+                    {
+                        if (respiratoryRate < 12 || respiratoryRate > 20)
+                        {
+                            <p class="status danger">⚠️ Abnormal RR (@respiratoryRate).</p>
+                        }
+                        else
+                        {
+
+                            <p class="status ok">✅ Normal RR (@respiratoryRate).</p>
+                        }
+                    }
+                }
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">➕ Add Reading</button>
+                    <a class="btn" href="/Patient/Dashboard_P">← Back to Clinics</a>
+                </div>
+            </div>
+        }
+
+        <!-- History + Actions -->
+        <div class="card">
+            <h3 class="section-title">History</h3>
+
+            @if (!records.Any())
+            {
+                <div style="color:var(--muted); font-weight:800;">No records yet.</div>
+            }
+            else
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:220px;">Date</th>
+                            <th>Temp</th>
+                            <th>O2</th>
+                            <th>RR</th>
+                            <th>W</th>
+                            <th>H</th>
+                            <th style="width:180px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in records)
+                        {
+                            <tr>
+                                <td>@r.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@r.Temperature</td>
+                                <td>@r.OxygenLevel</td>
+                                <td>@r.RespiratoryRate</td>
+                                <td>@r.Weight</td>
+                                <td>@r.Height</td>
+                                <td>
+                                    <a class="action-btn" href="/Patient/EditGeneralCheckup/@r.Id">Edit</a>
+
+                                    <form method="post" action="/Patient/DeleteGeneralCheckup" style="display:inline;"
+                                          onsubmit="return confirm('Delete this record?');">
+                                        <input type="hidden" name="id" value="@r.Id" />
+                                        <button type="submit" class="action-btn action-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,107 @@
+﻿@model HelthTrack.Models.AppointmentRecord
+@{
+    Layout = null;
+    var from = (ViewBag.From as string) ?? "DiabetesClinic";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Appointment</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI',system-ui,Arial,sans-serif;
+            background: linear-gradient(135deg,#f5f7fb,#eef2ff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: 560px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        .h {
+            padding: 16px 18px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 900;
+            color: #2563eb;
+        }
+
+        .b {
+            padding: 16px 18px;
+            display: grid;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: 900;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .btn {
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 900;
+            cursor: pointer;
+            text-decoration: none;
+            color: #111827;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border: none;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="h">Edit Appointment</div>
+
+        <form class="b" method="post" action="/Patient/EditAppointment">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="hidden" name="from" value="@from" />
+
+            <label>Date</label>
+            <input type="datetime-local" name="date" value="@Model.Date.ToString("yyyy-MM-ddTHH:mm")" required />
+
+            <label>Description</label>
+            <input type="text" name="description" value="@Model.Description" required />
+
+            <div class="actions">
+                <a class="btn" href="/Patient/Appointments?from=@from">Cancel</a>
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

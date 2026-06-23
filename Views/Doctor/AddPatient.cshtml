@@ -1,0 +1,128 @@
+﻿@model HelthTrack.Models.Patient
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Collections.Generic
+@using System.Linq
+
+@{
+    ViewBag.Title = "Add Patient";
+    Layout = null;
+
+    var users = ViewBag.PatientUsers as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+
+    var userOptions = users.Select(u => new SelectListItem
+    {
+        Value = u.Id.ToString(),
+        Text = $"{u.Username} - {u.FullName}"
+    }).ToList();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Add Patient</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #e8f0fe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            width: 380px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            background: #0078ff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+            button:hover {
+                background: #005fcc;
+            }
+
+        a {
+            color: #0078ff;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .hint {
+            margin: -6px 0 12px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .validation {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-box">
+        <h2 style="text-align:center;">Add New Patient</h2>
+
+        @using (Html.BeginForm("AddPatient", "Doctor", FormMethod.Post))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "validation" })
+
+            <label>Select Patient Account:</label>
+            @Html.DropDownListFor(
+            m => m.PatientUserId,
+                userOptions,
+                "Select patient...",
+                new { required = "required" }
+                )
+        @Html.ValidationMessageFor(m => m.PatientUserId, "", new { @class = "validation" })
+
+        <div class="hint">Choose the patient from registered accounts.</div>
+        <div class="hint">Patient name and age will be taken automatically from the selected account (DOB).</div>
+
+        <label>Patient Type:</label>
+        @Html.DropDownListFor(
+                m => m.PatientType,
+                new List<SelectListItem>
+                {
+                new SelectListItem { Text = "Diabetic Patient", Value = "Diabetes" },
+                new SelectListItem { Text = "Heart Patient", Value = "Heart" },
+                new SelectListItem { Text = "Both (Diabetes + Heart)", Value = "Both" }
+                },
+                "Select patient type...",
+                new { required = "required" }
+                )
+        @Html.ValidationMessageFor(m => m.PatientType, "", new { @class = "validation" })
+
+        <button type="submit">Add Patient</button>
+                }
+
+        <br><br>
+        <a href="/Doctor/Patients">← Back to Patients List</a>
+    </div>
+
+</body>
+</html>

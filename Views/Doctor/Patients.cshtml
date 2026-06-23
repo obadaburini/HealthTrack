@@ -1,0 +1,258 @@
+﻿@using Microsoft.AspNetCore.Http
+@using System.Collections.Generic
+@using System.Linq
+@model IEnumerable<HelthTrack.Models.Patient>
+
+@{
+    Layout = null;
+    var doctorName = Context.Session.GetString("UserName") ?? "Doctor";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Patients</title>
+
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --primary: #334155;
+            --danger: #ef4444;
+            --radius: 14px;
+            --shadow: 0 8px 20px rgba(0,0,0,.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            max-width: 1100px;
+            margin: auto;
+            padding: 14px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .title {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .subtitle {
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            border: 1px solid var(--border);
+            color: var(--primary);
+            background: #ffffff;
+        }
+
+            .btn:hover {
+                background: #f1f5f9;
+            }
+
+        .btn-logout {
+            color: #fff;
+            background: var(--danger);
+            border: none;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 18px auto;
+            padding: 0 22px 40px;
+        }
+
+        .hero {
+            margin-top: 8px;
+            padding: 18px;
+            border-radius: var(--radius);
+            background: #ffffff;
+            border: 1px solid var(--border);
+        }
+
+            .hero h2 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: 900;
+            }
+
+            .hero p {
+                margin: 6px 0 0;
+                color: var(--muted);
+                font-weight: 700;
+            }
+
+        .list {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-inner {
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .patient-name {
+            font-size: 17px;
+            font-weight: 900;
+            margin: 0;
+        }
+
+        .patient-id {
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #f8fafc;
+            font-weight: 800;
+            font-size: 13px;
+            border: 1px solid var(--border);
+        }
+
+            .badge strong {
+                color: var(--muted);
+                margin-right: 6px;
+            }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div>
+                <div class="title">Doctor Dashboard</div>
+                <div class="subtitle">Welcome, @doctorName</div>
+            </div>
+
+            <div class="actions">
+                <a class="btn" href="/Doctor/Dashboard_D">⬅ Back</a>
+                <a class="btn btn-logout" href="/Account/Logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+
+        <section class="hero">
+            <h2>My Patients</h2>
+            <p>Simple and clean patients list.</p>
+        </section>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div>No patients found.</div>
+        }
+        else
+        {
+            <section class="list">
+                @foreach (var p in Model)
+                {
+                    <div class="card">
+                        <div class="card-inner">
+
+                            <div>
+                                <p class="patient-name">@p.Name</p>
+                                <div class="patient-id">Patient User ID: @p.PatientUserId</div>
+                            </div>
+
+                            <div class="badges">
+                                <div class="badge"><strong>Age:</strong> @p.Age</div>
+
+                                <div class="badge">
+                                    <strong>Type:</strong>
+                                    @if (p.PatientType == "Diabetes")
+                                    {
+                                        <span>Diabetic Patient</span>
+                                    }
+                                    else if (p.PatientType == "Heart")
+                                    {
+
+                                        <span>Heart Patient</span>
+                                    }
+                                    else if (p.PatientType == "Both")
+                                    {
+
+                                        <span>Diabetes + Heart</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span>Not specified</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="actions">
+                                <a class="btn" href="/Doctor/Details/@p.PatientUserId">Details</a>
+                                <a class="btn" href="/Doctor/EditPatient?id=@p.PatientUserId">Edit</a>
+                                <a class="btn btn-logout" href="/Doctor/DeletePatient?id=@p.PatientUserId">Delete</a>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </section>
+        }
+
+    </main>
+
+</body>
+</html>

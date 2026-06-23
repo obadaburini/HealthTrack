@@ -1,0 +1,117 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = HelthTrack
+build_property.RootNamespace = HelthTrack
+build_property.ProjectDir = C:\Users\admin\OneDrive\Desktop\last\last\HelthTrack (3)\HelthTrack\HelthTrack\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\admin\OneDrive\Desktop\last\last\HelthTrack (3)\HelthTrack\HelthTrack
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Doctor/AddPatient.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXEFkZFBhdGllbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Doctor/Dashboard_D.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXERhc2hib2FyZF9ELmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Doctor/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Doctor/Patients.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXFBhdGllbnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/Appointments.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxBcHBvaW50bWVudHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/BloodSugar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxCbG9vZFN1Z2FyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/Dashboard_P.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxEYXNoYm9hcmRfUC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/DiabetesClinic.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxEaWFiZXRlc0NsaW5pYy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/ExerciseTips.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxFeGVyY2lzZVRpcHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/FoodTips.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxGb29kVGlwcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/GeneralCheckup.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxHZW5lcmFsQ2hlY2t1cC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/NutritionClinic.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxOdXRyaXRpb25DbGluaWMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Patient/NutritionResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxOdXRyaXRpb25SZXN1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/OneDrive/Desktop/last/last/HelthTrack (3)/HelthTrack/HelthTrack/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-ulsil6ltqz

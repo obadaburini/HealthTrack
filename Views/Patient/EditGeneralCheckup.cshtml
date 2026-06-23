@@ -1,0 +1,131 @@
+﻿@model HelthTrack.Models.GeneralCheckupRecord
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit General Checkup</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI',system-ui,Arial,sans-serif;
+            background: linear-gradient(135deg,#e6fffb,#e0f2fe);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: 680px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        .h {
+            padding: 16px 18px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 900;
+            color: #0ea5a4;
+        }
+
+        .b {
+            padding: 16px 18px;
+            display: grid;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: 800;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .btn {
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 900;
+            cursor: pointer;
+            text-decoration: none;
+            color: #0f172a;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg,#0ea5a4,#14b8a6);
+            border: none;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="h">Edit General Checkup</div>
+
+        <form class="b" method="post" action="/Patient/EditGeneralCheckup">
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <label>Date</label>
+            <input type="datetime-local" name="date" value="@Model.Date.ToString("yyyy-MM-ddTHH:mm")" required />
+
+            <div class="grid">
+                <div>
+                    <label>Temperature (°C)</label>
+                    <input type="number" step="0.1" name="temperature" value="@Model.Temperature" required />
+                </div>
+                <div>
+                    <label>Oxygen (%)</label>
+                    <input type="number" step="0.1" name="oxygenLevel" value="@Model.OxygenLevel" required />
+                </div>
+                <div>
+                    <label>Respiratory Rate</label>
+                    <input type="number" step="1" name="respiratoryRate" value="@Model.RespiratoryRate" required />
+                </div>
+                <div>
+                    <label>Weight (kg)</label>
+                    <input type="number" step="0.1" name="weight" value="@Model.Weight" required />
+                </div>
+                <div>
+                    <label>Height (cm)</label>
+                    <input type="number" step="0.1" name="height" value="@Model.Height" required />
+                </div>
+            </div>
+
+            <div class="actions">
+                <a class="btn" href="/Patient/GeneralCheckup">Cancel</a>
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

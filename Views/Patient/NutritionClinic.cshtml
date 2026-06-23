@@ -1,0 +1,114 @@
+﻿@model HelthTrack.ViewModels.NutritionInputViewModel
+@using Microsoft.AspNetCore.Http
+
+@{
+    Layout = null;
+    var patientName = Context.Session.GetString("UserName") ?? "Patient";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Nutrition Clinic</title>
+
+    <link rel="stylesheet" href="~/css/nutrition.css" />
+
+    <style>
+        .top-bar {
+            padding: 16px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .logout {
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            background: rgba(0,0,0,0.15);
+            color: #333;
+            font-weight: 600;
+        }
+
+            .logout:hover {
+                background: rgba(0,0,0,0.25);
+            }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            color: #333;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <div>🥗 Nutrition Clinic</div>
+        <a href="/Account/Logout" class="logout">Logout</a>
+    </div>
+
+    <div class="nutrition-container">
+        <h2>Hello, @patientName</h2>
+        <p>Please enter your details to calculate your daily calories and nutrition advice.</p>
+        @Html.ValidationSummary(true, "", new { style = "color:red; font-weight:700; margin:10px 0;" })
+
+        @if (ViewBag.Message != null)
+        {
+            <div style="color:red; font-weight:700; margin:10px 0;">
+                @ViewBag.Message
+            </div>
+        }
+
+        <form asp-controller="Patient" asp-action="NutritionResult" method="post">
+
+            <label for="Height">Height (cm)</label>
+            <input type="number"
+                   id="Height"
+                   name="Height"
+                   placeholder="Enter your height"
+                   min="50"
+                   max="250"
+                   step="0.1"
+                   required />
+
+            <label for="Weight">Weight (kg)</label>
+            <input type="number"
+                   id="Weight"
+                   name="Weight"
+                   placeholder="Enter your weight"
+                   min="10"
+                   max="400"
+                   step="0.1"
+                   required />
+
+            <label for="ActivityLevel">Activity Level</label>
+            <select id="ActivityLevel" name="ActivityLevel" required>
+                <option value="" disabled selected>Select your activity level</option>
+                <option value="Low">Low</option>
+                <option value="Moderate">Moderate</option>
+                <option value="High">High</option>
+            </select>
+
+            <label for="Goal">Goal</label>
+            <select id="Goal" name="Goal" required>
+                <option value="" disabled selected>Select your goal</option>
+                <option value="Lose">Lose weight</option>
+                <option value="Maintain">Maintain weight</option>
+                <option value="Gain">Gain weight</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <a class="back" href="/Patient/Dashboard_P">← Back to Clinics</a>
+    </div>
+
+</body>
+</html>

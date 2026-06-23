@@ -1,0 +1,132 @@
+﻿@model HelthTrack.Models.HeartRecord
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Heart Vitals</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #333;
+        }
+
+        .card {
+            width: 540px;
+            background: white;
+            padding: 26px;
+            border-radius: 16px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #b91c1c;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin: 12px 0 6px;
+        }
+
+        input {
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+            input:focus {
+                outline: none;
+                border-color: #b91c1c;
+            }
+
+        /* أزرار */
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1; /* هذا اللي بخليهم قد بعض */
+            height: 44px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #b91c1c;
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background: #7f1d1d;
+            }
+
+        .btn-ghost {
+            background: white;
+            color: #b91c1c;
+            border: 1px solid #e0e0e0;
+        }
+
+            .btn-ghost:hover {
+                background: #f7f7f7;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Edit Heart Vitals</h2>
+
+        <form method="post" action="/Patient/EditHeartVitals">
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <label>Date</label>
+            <input type="datetime-local"
+                   name="date"
+                   value="@Model.Date.ToString("yyyy-MM-ddTHH:mm")"
+                   required />
+
+            <label>Systolic</label>
+            <input type="number" name="systolic" value="@Model.Systolic" required />
+
+            <label>Diastolic</label>
+            <input type="number" name="diastolic" value="@Model.Diastolic" required />
+
+            <label>Heart Rate</label>
+            <input type="number" name="heartRate" value="@Model.HeartRate" required />
+
+            <div class="actions">
+                <a class="btn btn-ghost" href="/Patient/HeartVitals">Cancel</a>
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
