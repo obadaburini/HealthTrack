@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace HelthTrack.Controllers
 {
+    [HelthTrack.Filters.SessionRole("Doctor")]
     public class DoctorController : Controller
     {
         private readonly DataBaseContext _db;
@@ -20,25 +21,9 @@ namespace HelthTrack.Controllers
             _db = db;
         }
 
-        // ================= AUTH =================
-        private bool IsDoctor()
-        {
-            return HttpContext.Session.GetString("UserRole") == "Doctor";
-        }
-
-        private IActionResult DoctorOnly()
-        {
-            if (!IsDoctor())
-                return RedirectToAction("Login", "Account");
-
-            return null!;
-        }
-
         // ================= DASHBOARD =================
         public IActionResult Dashboard_D()
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             return View();
         }
@@ -46,8 +31,6 @@ namespace HelthTrack.Controllers
         // ================= PATIENTS =================
         public async Task<IActionResult> Patients()
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             var patients = await _db.Patient
                 .OrderBy(p => p.PatientUserId)
@@ -59,8 +42,6 @@ namespace HelthTrack.Controllers
         // ================= DETAILS =================
         public async Task<IActionResult> Details(int id)
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             var patient = await _db.Patient
                 .Include(p => p.PatientUser)
@@ -86,8 +67,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> AddPatient()
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             ViewBag.PatientUsers = await _db.PatientUser
                 .OrderBy(u => u.Username)
@@ -101,8 +80,6 @@ namespace HelthTrack.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPatient(Patient newPatient)
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             var allowedTypes = new[] { "Diabetes", "Heart", "Both" };
 
@@ -138,6 +115,11 @@ namespace HelthTrack.Controllers
                 return View(newPatient);
             }
 
+            if (await _db.Patient.AnyAsync(p => p.PatientUserId == newPatient.PatientUserId))
+            {
+                ModelState.AddModelError("PatientUserId", "This patient is already in the list.");
+                return await AddPatient();
+            }
             _db.Patient.Add(newPatient);
             await _db.SaveChangesAsync();
 
@@ -148,8 +130,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPatient(int id)
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             var patient = await _db.Patient.FirstOrDefaultAsync(p => p.PatientUserId == id);
             if (patient == null) return NotFound();
@@ -167,8 +147,6 @@ namespace HelthTrack.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPatient(EditPatientVM vm)
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             if (!ModelState.IsValid) return View(vm);
 
@@ -185,7 +163,8 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> DeletePatient(int id)
         {
-            var patient = await _db.Patient.FirstOrDefaultAsync(p => p.PatientUserId == id);
+            var patient = await _db.Patient.Include(p => p.PatientUser)
+                .FirstOrDefaultAsync(p => p.PatientUserId == id);
             if (patient == null) return NotFound();
             return View(patient);
         }
@@ -206,8 +185,6 @@ namespace HelthTrack.Controllers
         // ================= REPORTS =================
         public async Task<IActionResult> Reports()
         {
-            var guard = DoctorOnly();
-            if (guard != null) return guard;
 
             ViewBag.TotalPatients = await _db.Patient.CountAsync();
 

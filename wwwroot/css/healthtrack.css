@@ -1,0 +1,42 @@
+/* Shared finishing layer for the existing Razor screens. */
+* { box-sizing: border-box; }
+body { line-height: 1.5; -webkit-font-smoothing: antialiased; }
+input, select, textarea, button { font: inherit; }
+button, .btn, .logout { transition: background-color .15s, box-shadow .15s; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+input, select, textarea { max-width: 100%; }
+input[type=number], input[type=date], input[type=datetime-local] { min-width: 0; }
+.logout-form { display: inline-flex; margin: 0; }
+.logout-form button { font: inherit; cursor: pointer; }
+.validation-summary-valid { display: none; }
+.validation-banner { padding: 14px 22px; background: #fff1f2; color: #9f1239; border-bottom: 1px solid #fecdd3; }
+.field-validation-error, .validation-summary-errors { color: #9f1239; }
+.input-validation-error { border-color: #be123c !important; }
+.service-message { max-width: 640px; margin: 80px auto; padding: 32px; background: #fff; border-radius: 16px; }
+.role-card { background: white; color: #0f172a; }
+body:has(> .card), body:has(> .form-box) { background: radial-gradient(circle at top left, #dbeafe, transparent 50%), #f5f8fc; }
+body:has(> .card) > .card, body:has(> .form-box) > .form-box { border: 1px solid #e2e8f0; box-shadow: 0 16px 48px #0f172a14; }
+.top-bar { align-items: center; gap: 12px; }
+.top-bar .logout-form button { border: 0; }
+.nutrition-container, .tips-container { max-width: calc(100vw - 32px); }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+.card, .form-box { max-width: calc(100vw - 32px); }
+.topbar-inner, .header { gap: 12px; }
+table { border-collapse: collapse; }
+.table-wrap, .table-container { overflow-x: auto; }
+@media (max-width: 640px) {
+    body { overflow-wrap: anywhere; }
+    body:has(> .card), body:has(> .form-box) { padding: 24px 16px; align-items: flex-start; }
+    body > .card, body > .form-box { width: 100%; max-width: 480px; padding: 24px 20px; margin: 0 auto; }
+    .topbar-inner, .header { flex-wrap: wrap; padding: 16px; }
+    .top-bar { flex-wrap: wrap; font-size: 16px; padding: 16px; }
+    .wrap, .container { padding-left: 16px; padding-right: 16px; }
+    .grid, .cards, .clinics, .stats-grid { grid-template-columns: 1fr !important; }
+    .hero h1, .hero h2 { font-size: 26px; }
+    .actions { flex-wrap: wrap; }
+    .actions .btn { text-align: center; }
+    .card-b, .card-body { overflow-x: auto; }
+}

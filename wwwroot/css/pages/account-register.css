@@ -1,0 +1,108 @@
+body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 420px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 32px 30px;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+            .brand h2 {
+                margin: 0;
+                color: #0078ff;
+                font-size: 28px;
+                font-weight: 800;
+            }
+
+            .brand p {
+                margin: 8px 0 0;
+                color: #666;
+                font-size: 14px;
+            }
+
+        .error {
+            background: #ffe6e6;
+            color: #b00020;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin: 12px 0 16px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .field {
+            margin-bottom: 12px;
+        }
+
+            .field label {
+                display: block;
+                margin-bottom: 6px;
+                color: #333;
+                font-size: 13px;
+                font-weight: 700;
+            }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d7d7d7;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+            input:focus, select:focus {
+                border-color: #0078ff;
+                box-shadow: 0 0 0 4px rgba(0,120,255,.12);
+            }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: #0078ff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+            .btn:hover {
+                background: #005fcc;
+            }
+
+        .footer {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+            .footer a {
+                color: #0078ff;
+                font-weight: 700;
+                text-decoration: none;
+            }

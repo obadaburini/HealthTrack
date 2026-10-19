@@ -1,8 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+﻿@{ ViewData["Title"] = "Welcome"; }
+<section class="service-message">
+    <h1>HealthTrack</h1>
+    <p>A shared space for patients to keep track of health readings and appointments, and for doctors to review their patients' records.</p>
+    <p>Track blood sugar, heart vitals, general checkups, and nutrition estimates in one place.</p>
+    <p><a class="btn btn-primary" asp-controller="Account" asp-action="Login">Sign in</a> <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Register">Create a patient account</a></p>
+</section>

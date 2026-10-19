@@ -1,0 +1,45 @@
+# Visual Studio / IDE state
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build, publish, package, coverage, and test artifacts
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+publish/
+TestResults/
+coverage/
+*.nupkg
+*.snupkg
+*.log
+logs/
+node_modules/
+
+# Local configuration, databases, and credentials
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+*.pfx
+*.p12
+*.pem
+*.key
+*.mdf
+*.ldf
+*.bak
+*.db
+*.db-shm
+*.db-wal
+*.pubxml.user
+Properties/PublishProfiles/
+.DS_Store
+Thumbs.db

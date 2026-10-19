@@ -1,4 +1,4 @@
-﻿@model HelthTrack.Models.PatientUser
+@model HelthTrack.ViewModels.RegisterPatientVM
 @{
     Layout = null;
 }
@@ -10,121 +10,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>HealthTrack – Create Account</title>
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card {
-            width: 420px;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            padding: 32px 30px;
-        }
-
-        .brand {
-            text-align: center;
-            margin-bottom: 18px;
-        }
-
-            .brand h2 {
-                margin: 0;
-                color: #0078ff;
-                font-size: 28px;
-                font-weight: 800;
-            }
-
-            .brand p {
-                margin: 8px 0 0;
-                color: #666;
-                font-size: 14px;
-            }
-
-        .error {
-            background: #ffe6e6;
-            color: #b00020;
-            padding: 10px 12px;
-            border-radius: 10px;
-            margin: 12px 0 16px;
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .field {
-            margin-bottom: 12px;
-        }
-
-            .field label {
-                display: block;
-                margin-bottom: 6px;
-                color: #333;
-                font-size: 13px;
-                font-weight: 700;
-            }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d7d7d7;
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            box-sizing: border-box;
-        }
-
-            input:focus, select:focus {
-                border-color: #0078ff;
-                box-shadow: 0 0 0 4px rgba(0,120,255,.12);
-            }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            background: #0078ff;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 6px;
-        }
-
-            .btn:hover {
-                background: #005fcc;
-            }
-
-        .footer {
-            text-align: center;
-            margin-top: 14px;
-            font-size: 14px;
-        }
-
-            .footer a {
-                color: #0078ff;
-                font-weight: 700;
-                text-decoration: none;
-            }
-    </style>
+    <link rel="stylesheet" href="~/css/pages/account-register.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/healthtrack.css" asp-append-version="true" />
 </head>
 
 <body>
     <div class="card">
 
+        @Html.ValidationSummary(false, "", new { @class = "error", role = "alert" })
         <div class="brand">
             <h2>HealthTrack</h2>
             <p>Create your patient account</p>
@@ -138,7 +31,7 @@
         @using (Html.BeginForm("RegisterPatient", "Account", FormMethod.Post))
         {
             <div class="field">
-                <label>Full Name</label>
+                <label for="FullName">Full Name</label>
                 @Html.TextBoxFor(m => m.FullName, new {
                 placeholder = "Enter your full name",
                         required = "required"
@@ -146,7 +39,7 @@
         </div>
 
         <div class="field">
-            <label>Email</label>
+            <label for="Email">Email</label>
             @Html.TextBoxFor(m => m.Email, new {
                         placeholder = "Enter your email address",
                         type = "email",
@@ -156,7 +49,7 @@
 
         <div class="grid">
             <div class="field">
-                <label>Date of Birth</label>
+                <label for="DateOfBirth">Date of Birth</label>
                 @Html.TextBoxFor(m => m.DateOfBirth, new {
                                 type = "date",
                                 required = "required"
@@ -164,7 +57,7 @@
             </div>
 
             <div class="field">
-                <label>Gender</label>
+                <label for="Gender">Gender</label>
                 @Html.DropDownListFor(
                                 m => m.Gender,
                                 new SelectList(new[]
@@ -179,7 +72,7 @@
         </div>
 
         <div class="field">
-            <label>Disease</label>
+            <label for="Disease">Disease</label>
             @Html.TextBoxFor(m => m.Disease, new {
                         placeholder = "e.g. Diabetes, Hypertension",
                         required = "required"
@@ -188,7 +81,7 @@
 
         <div class="grid">
             <div class="field">
-                <label>Username</label>
+                <label for="Username">Username</label>
                 @Html.TextBoxFor(m => m.Username, new {
                                 placeholder = "Choose a username",
                                 required = "required"
@@ -196,7 +89,7 @@
             </div>
 
             <div class="field">
-                <label>Password</label>
+                <label for="Password">Password</label>
                 @Html.PasswordFor(m => m.Password, new {
                                 placeholder = "Enter your password",
                                 required = "required"
@@ -205,9 +98,9 @@
         </div>
 
         <div class="field">
-            <label>Confirm Password</label>
+            <label for="ConfirmPassword">Confirm Password</label>
             <input type="password"
-                   name="ConfirmPassword"
+                   id="ConfirmPassword" name="ConfirmPassword" autocomplete="new-password" minlength="8"
                    placeholder="Re-enter your password"
                    required />
         </div>
