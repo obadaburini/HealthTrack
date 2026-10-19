@@ -6,74 +6,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <title>Reports</title>
 
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background: #f8fafc;
-        }
-
-        .top {
-            background: #0f172a;
-            color: white;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .container {
-            padding: 30px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .box {
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-            .box h2 {
-                margin: 0;
-                font-size: 28px;
-                color: #0078ff;
-            }
-
-            .box p {
-                margin-top: 8px;
-                font-weight: bold;
-                color: #475569;
-            }
-
-        .back-wrapper {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        .back-bottom {
-            display: inline-block;
-            padding: 12px 22px;
-            border-radius: 12px;
-            background: #0f172a;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-            .back-bottom:hover {
-                background: #020617;
-            }
-    </style>
+    <link rel="stylesheet" href="~/css/pages/doctor-reports.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/healthtrack.css" asp-append-version="true" />
 </head>
 
 <body>

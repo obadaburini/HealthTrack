@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HelthTrack.Controllers
 {
+    [HelthTrack.Filters.SessionRole("Patient")]
     public class PatientController : Controller
     {
         private readonly DataBaseContext _db;
@@ -28,8 +30,6 @@ namespace HelthTrack.Controllers
         // ================== DIABETES CLINIC ==================
         public IActionResult DiabetesClinic()
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
             return View();
         }
 
@@ -37,8 +37,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> BloodSugar()
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -56,10 +54,10 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> BloodSugar(double sugarLevel)
+        public async Task<IActionResult> BloodSugar([Range(1, 1500)] double sugarLevel)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (!ModelState.IsValid) return InvalidReading("BloodSugar");
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -78,8 +76,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> GeneralCheckup()
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -99,10 +95,10 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GeneralCheckup(double temperature, double weight, double height, double oxygenLevel, double respiratoryRate)
+        public async Task<IActionResult> GeneralCheckup([Range(25, 45)] double temperature, [Range(1, 500)] double weight, [Range(30, 250)] double height, [Range(1, 100)] double oxygenLevel, [Range(1, 100)] double respiratoryRate)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (!ModelState.IsValid) return InvalidReading("GeneralCheckup");
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -125,9 +121,8 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> Appointments(string from = "DiabetesClinic")
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
+            from = NormalizeClinic(from);
             HttpContext.Session.SetString("ClinicName", from);
             ViewBag.ClinicName = from;
 
@@ -144,10 +139,12 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAppointment(DateTime date, string description, string from)
+        public async Task<IActionResult> AddAppointment(DateTime date, [Required, StringLength(500)] string description, string from)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (date == default || date > DateTime.Now.AddYears(5)) ModelState.AddModelError("date", "Enter a valid date.");
+            if (date < DateTime.Now) ModelState.AddModelError("date", "Select a future appointment time.");
+            if (!ModelState.IsValid) return InvalidReading("Appointments", from);
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -160,7 +157,7 @@ namespace HelthTrack.Controllers
 
             await _db.SaveChangesAsync();
 
-            from = string.IsNullOrWhiteSpace(from) ? "DiabetesClinic" : from;
+            from = NormalizeClinic(from);
             return RedirectToAction("Appointments", new { from });
         }
 
@@ -168,16 +165,12 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public IActionResult HeartClinic()
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
             return View();
         }
 
         [HttpGet]
         public async Task<IActionResult> HeartVitals()
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -195,10 +188,11 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> HeartVitals(int systolic, int diastolic, int heartRate)
+        public async Task<IActionResult> HeartVitals([Range(40, 300)] int systolic, [Range(20, 200)] int diastolic, [Range(20, 300)] int heartRate)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (systolic <= diastolic) ModelState.AddModelError("systolic", "Systolic pressure must be greater than diastolic pressure.");
+            if (!ModelState.IsValid) return InvalidReading("HeartVitals");
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -218,8 +212,6 @@ namespace HelthTrack.Controllers
         // ================== NUTRITION CLINIC ==================
         public IActionResult NutritionClinic()
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             return View();
         }
@@ -227,8 +219,6 @@ namespace HelthTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> NutritionResult(NutritionInputViewModel model)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             if (!ModelState.IsValid)
                 return View("NutritionClinic", model);
@@ -328,8 +318,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> EditBloodSugar(int id)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -341,10 +329,11 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditBloodSugar(int id, double sugarLevel, DateTime date)
+        public async Task<IActionResult> EditBloodSugar(int id, [Range(1, 1500)] double sugarLevel, DateTime date)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (date == default || date > DateTime.Now) ModelState.AddModelError("date", "Enter a valid date.");
+            if (!ModelState.IsValid) return InvalidReading("BloodSugar");
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -363,8 +352,6 @@ namespace HelthTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteBloodSugar(int id)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -383,8 +370,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> EditHeartVitals(int id)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -396,10 +381,12 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditHeartVitals(int id, int systolic, int diastolic, int heartRate, DateTime date)
+        public async Task<IActionResult> EditHeartVitals(int id, [Range(40, 300)] int systolic, [Range(20, 200)] int diastolic, [Range(20, 300)] int heartRate, DateTime date)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (date == default || date > DateTime.Now) ModelState.AddModelError("date", "Enter a valid date.");
+            if (systolic <= diastolic) ModelState.AddModelError("systolic", "Systolic pressure must be greater than diastolic pressure.");
+            if (!ModelState.IsValid) return InvalidReading("HeartVitals");
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -420,8 +407,6 @@ namespace HelthTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteHeartVitals(int id)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -440,8 +425,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> EditGeneralCheckup(int id)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -453,10 +436,11 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditGeneralCheckup(int id, double temperature, double weight, double height, double oxygenLevel, double respiratoryRate, DateTime date)
+        public async Task<IActionResult> EditGeneralCheckup(int id, [Range(25, 45)] double temperature, [Range(1, 500)] double weight, [Range(30, 250)] double height, [Range(1, 100)] double oxygenLevel, [Range(1, 100)] double respiratoryRate, DateTime date)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (date == default || date > DateTime.Now) ModelState.AddModelError("date", "Enter a valid date.");
+            if (!ModelState.IsValid) return InvalidReading("GeneralCheckup");
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -479,8 +463,6 @@ namespace HelthTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteGeneralCheckup(int id)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -499,8 +481,6 @@ namespace HelthTrack.Controllers
         [HttpGet]
         public async Task<IActionResult> EditAppointment(int id, string from = "DiabetesClinic")
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -515,10 +495,11 @@ namespace HelthTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditAppointment(int id, DateTime date, string description, string from)
+        public async Task<IActionResult> EditAppointment(int id, DateTime date, [Required, StringLength(500)] string description, string from)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
+            if (date == default || date > DateTime.Now.AddYears(5)) ModelState.AddModelError("date", "Enter a valid date.");
+            if (!ModelState.IsValid) return InvalidReading("Appointments", from);
+
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -532,15 +513,13 @@ namespace HelthTrack.Controllers
 
             await _db.SaveChangesAsync();
 
-            from = string.IsNullOrWhiteSpace(from) ? "DiabetesClinic" : from;
+            from = NormalizeClinic(from);
             return RedirectToAction("Appointments", new { from });
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteAppointment(int id, string from)
         {
-            var role = HttpContext.Session.GetString("UserRole");
-            if (role != "Patient") return RedirectToAction("Login", "Account");
 
             var username = HttpContext.Session.GetString("UserName") ?? "";
 
@@ -552,8 +531,15 @@ namespace HelthTrack.Controllers
             _db.AppointmentRecords.Remove(appt);
             await _db.SaveChangesAsync();
 
-            from = string.IsNullOrWhiteSpace(from) ? "DiabetesClinic" : from;
+            from = NormalizeClinic(from);
             return RedirectToAction("Appointments", new { from });
+        }
+        private static string NormalizeClinic(string? from) => from is "HeartClinic" or "NutritionClinic" or "GeneralCheckup" ? from : "DiabetesClinic";
+
+        private IActionResult InvalidReading(string action, string? from = null)
+        {
+            TempData["Error"] = "Please enter valid values within the allowed ranges and a valid date.";
+            return RedirectToAction(action, new { from = NormalizeClinic(from) });
         }
     }
 }

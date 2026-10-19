@@ -1,0 +1,132 @@
+body {
+            font-family: 'Segoe UI',sans-serif;
+            background: linear-gradient(135deg,#ffecd2,#fcb69f);
+            margin: 0;
+            color: #333;
+        }
+
+        .top-bar {
+            background: rgba(0,0,0,0.15);
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+        }
+
+        .logout {
+            background: #ff4d4d;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 40px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+        }
+
+        input {
+            padding: 12px;
+            width: 190px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            background: #b91c1c;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background: #7f1d1d;
+            }
+
+        /* ✅ Actions container: يخليهم قد بعض */
+        .actions-cell {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* ✅ نفس الشكل لـ <a> و <button> */
+        .action-btn {
+            width: 82px; /* نفس العرض */
+            height: 34px; /* نفس الارتفاع */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            color: #b91c1c;
+            padding: 0; /* مهم حتى ما يختلف button عن a */
+            line-height: 1;
+        }
+
+            .action-btn:hover {
+                background: #f5f5f5;
+            }
+
+        .action-danger {
+            border-color: #fecaca;
+            color: #c62828;
+        }
+
+        .ok {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .warn {
+            color: #ef6c00;
+            font-weight: bold;
+        }
+
+        .danger {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #b91c1c;
+            color: white;
+        }
+
+        a.back {
+            color: #b91c1c;
+            font-weight: bold;
+            text-decoration: none;
+        }

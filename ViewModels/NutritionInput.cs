@@ -13,9 +13,11 @@ namespace HelthTrack.ViewModels
         public double Weight { get; set; }
 
         [Required(ErrorMessage = "Activity level is required")]
+        [RegularExpression("Low|Moderate|High")]
         public string? ActivityLevel { get; set; } // Low / Moderate / High
 
         [Required(ErrorMessage = "Goal is required")]
+        [RegularExpression("Lose|Maintain|Gain")]
         public string? Goal { get; set; } // Lose / Maintain / Gain
     }
 }
