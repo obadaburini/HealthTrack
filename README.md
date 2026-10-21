@@ -139,23 +139,9 @@ Screenshots are captured locally using synthetic demo accounts and records in an
 | --- | --- |
 | ![Patient dashboard](docs/screenshots/patient-dashboard.png) | ![Doctor dashboard](docs/screenshots/doctor-dashboard.png) |
 
-| Blood sugar | Heart vitals |
-| --- | --- |
-| ![Blood sugar readings](docs/screenshots/blood-sugar.png) | ![Heart vitals](docs/screenshots/heart-vitals.png) |
+![Nutrition calculator](docs/screenshots/nutrition.png)
 
-| General checkup | Appointments |
-| --- | --- |
-| ![General checkup](docs/screenshots/general-checkup.png) | ![Appointments](docs/screenshots/appointments.png) |
-
-| Nutrition | Patient directory |
-| --- | --- |
-| ![Nutrition calculator](docs/screenshots/nutrition.png) | ![Patient directory](docs/screenshots/patients.png) |
-
-| Patient details | Reports |
-| --- | --- |
-| ![Patient details](docs/screenshots/patient-details.png) | ![Doctor reports](docs/screenshots/reports.png) |
-
-[Heart clinic](docs/screenshots/heart-clinic.png) · [Diabetes clinic](docs/screenshots/diabetes-clinic.png)
+Five representative existing captures are selected above; the other original images are retained in `docs/screenshots/`. The portfolio review reused these captures rather than generating another set. The current solution build and seven tests passed; this does not repeat the earlier audit's full authenticated database workflow.
 
 ## Current boundaries
 
